@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Claim } from "./types";
 
-export function ClaimList() {
+export function ClaimList({ refreshKey }: { refreshKey: number }) {
     const [claims, setClaims] = useState<Claim[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -22,7 +22,7 @@ export function ClaimList() {
                 setError(err.message);
                 setLoading(false);
             });
-    }, []);
+    }, [refreshKey]);
 
     if (loading) return <p>Loading claims…</p>;
     if (error) return <p>Something went wrong: {error}</p>;

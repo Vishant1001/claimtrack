@@ -1,10 +1,11 @@
 package com.vishant.claimtrack.claim;
 
+import jakarta.validation.Valid;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,5 +36,11 @@ public class ClaimController {
                         "E-bike stolen from train station", new BigDecimal("3200.00")));
             }
         };
+    }
+    @PostMapping
+    public ResponseEntity<Claim> createClaim(@Valid @RequestBody CreateClaimRequest request) {
+        Claim claim = new Claim(request.title(), request.description(), request.amount());
+        Claim saved = claimRepository.save(claim);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 }
